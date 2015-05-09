@@ -1,7 +1,10 @@
-from django.shortcuts import render, redirect
+from django.conf import settings
+from django.contrib.auth import authenticate
 from django.contrib.auth import decorators as auth
 from django.contrib.auth import login
+from django.shortcuts import render, redirect
 
+from elostars.lib import matchup
 from elostars.main import forms
 from elostars.main import models as main
 
@@ -14,21 +17,65 @@ def home(request, template="home.html"):
 
 
 def signup(request, template="registration/signup.html"):
-
     if request.user.is_authenticated():
         return redirect("main:rate")
 
-    form = forms.SignupForm(request.POST or None, request.FILES or None)
+    from elostars.lib.guid import make_guid
+
+    form = forms.SignupForm(request.POST or None, request.FILES or None,
+        initial={} if not settings.DEBUG else {
+            "username": "test-%s" % make_guid()[:4],
+            "email": "%s@example.com" % make_guid()[:6],
+            "first_name": "Cheesey",
+            "last_name": "McNasty",
+            "password": "superpad",
+
+        })
     if form.is_valid():
         user = form.save()
+        user = authenticate(
+            username=user.username,
+            password=request.POST["password"]
+        )
         login(request, user)
         return redirect("main:rate")
     return render(request, template, {
         "form": form
     })
 
+
 @auth.login_required(login_url="main:home")
 def rate(request, template="rate.html"):
+    old_pair = None
+    if request.method == "POST":
+        key = request.POST.get("key")
+        form = forms.MatchupForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            winner = data["winner"]
+            loser = data["loser"]
+            # todo: save rating
+            winner.win_against(loser)
+            old_pair = data["pair"]
+        matchup.close_matchup(key)
+
+    pair = matchup.create_matchup(request.user.pk)
+    form = forms.MatchupForm(initial={"key": pair.key})
+
+    if old_pair:
+        if old_pair.right.score > old_pair.left.score:
+            old_pair = matchup.Matchup(
+                old_pair.key, old_pair.right, old_pair.left)
+
+    return render(request, template, {
+        "form": form,
+        "pair": pair,
+        "old_pair": old_pair,
+    })
+
+
+@auth.login_required(login_url="main:home")
+def user_settings(request, template="settings.html"):
     return render(request, template, {
 
     })

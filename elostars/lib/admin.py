@@ -1,7 +1,7 @@
 import functools
 import operator
 
-from saltroads.lib import urls
+from elostars.lib import urls
 
 
 def _clean_short_description(description):
@@ -13,6 +13,7 @@ def _clean_short_description(description):
     if isinstance(description, (list, tuple)):
         description = description[0]
     return description.replace('_', ' ')
+
 
 def prop_formatter(allow_none=False, call_callables=True):
     """
@@ -31,6 +32,7 @@ def prop_formatter(allow_none=False, call_callables=True):
             truncate('description', length=30),
         )
     """
+
     def prop_formatter_decorator(formatter):
         @functools.wraps(formatter)
         def decorator(prop, description=None, none=u'(None)', **format):
@@ -43,12 +45,16 @@ def prop_formatter(allow_none=False, call_callables=True):
                     return formatter(obj, value, **format)
                 else:
                     return none
+
             wrapper.allow_tags = True
-            wrapper.short_description = _clean_short_description(description or prop)
+            wrapper.short_description = _clean_short_description(
+                description or prop)
             return wrapper
+
         return decorator
 
     return prop_formatter_decorator
+
 
 def multi_prop_formatter(default_description, call_callables=True):
     """
@@ -56,21 +62,26 @@ def multi_prop_formatter(default_description, call_callables=True):
     :param default_description: The default description shown
     :return: A prop_formatter for formatting multiple values at once
     """
+
     def prop_formatter(formatter):
         @functools.wraps(formatter)
         def decorator(props, description=default_description, **format):
             @functools.wraps(formatter)
             def wrapper(obj):
-                values= operator.attrgetter(*props)(obj)
+                values = operator.attrgetter(*props)(obj)
                 if call_callables:
                     values = [value() if callable(value) else value
                               for value in values]
                 return formatter(obj, values, **format)
+
             wrapper.allow_tags = True
             wrapper.short_description = _clean_short_description(description)
             return wrapper
+
         return decorator
+
     return prop_formatter
+
 
 def _build_link(obj, url, title, target, title_prop):
     if title_prop:
@@ -78,8 +89,9 @@ def _build_link(obj, url, title, target, title_prop):
     return u'<a href="%(url)s" target="%(target)s">%(title)s</a>' % {
         'url': url,
         'target': target,
-        'title' : title,
-        }
+        'title': title,
+    }
+
 
 @prop_formatter()
 def link(obj, url, target='_blank', title_prop=None):
@@ -93,6 +105,7 @@ def link(obj, url, target='_blank', title_prop=None):
     :return: 'a' tag
     """
     return _build_link(obj, url, url, target, title_prop)
+
 
 @prop_formatter()
 def object_link(obj, related, target='_blank', title_prop=None):
@@ -108,6 +121,7 @@ def object_link(obj, related, target='_blank', title_prop=None):
     url = related.get_absolute_url()
     return _build_link(obj, url, related, target, title_prop)
 
+
 @prop_formatter()
 def edit_object_link(obj, related, target='_self', title_prop=None):
     """
@@ -121,6 +135,7 @@ def edit_object_link(obj, related, target='_self', title_prop=None):
     """
     url = urls.url_to_edit_object(related)
     return _build_link(obj, url, related, target, title_prop)
+
 
 @prop_formatter()
 def thumb(obj, value, w='', h=80):
@@ -143,10 +158,11 @@ def thumb(obj, value, w='', h=80):
     return u'<a href="%(url)s" target="_blank">' \
            u'  <img src="%(url)s" width="%(width)s" height="%(height)s" />' \
            u'</a>' % {
-        'url': url,
-        'width': w,
-        'height': h
-    }
+               'url': url,
+               'width': w,
+               'height': h
+           }
+
 
 @prop_formatter()
 def truncate(obj, value, length=80):
@@ -159,8 +175,9 @@ def truncate(obj, value, length=80):
     """
     value = str(value)
     if len(value) > length:
-        return value[:length-1] + u'&hellip;'
+        return value[:length - 1] + u'&hellip;'
     return value
+
 
 @prop_formatter()
 def email(obj, email, target='_blank', title_prop=None):
@@ -174,6 +191,7 @@ def email(obj, email, target='_blank', title_prop=None):
     """
     return _build_link(obj, 'mailto:%s' % email, email, target, title_prop)
 
+
 @prop_formatter()
 def phone(obj, number, target='_blank', title_prop=None):
     """
@@ -185,6 +203,7 @@ def phone(obj, number, target='_blank', title_prop=None):
     :return: 'a' tag
     """
     return _build_link(obj, 'tel:%s' % number, number, target, title_prop)
+
 
 @multi_prop_formatter('coordinates')
 def lat_long(obj, value, empty='?'):
@@ -214,6 +233,7 @@ def lat_long(obj, value, empty='?'):
         lng = '%s&deg;E' % empty
 
     return '%s %s' % (lat, lng)
+
 
 @prop_formatter()
 def value(obj, value):

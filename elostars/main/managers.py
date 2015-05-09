@@ -20,4 +20,5 @@ class UserManager(BaseUserManager):
 
 class PictureManager(m.QuerySetManager):
     class QuerySet(m.QuerySet):
-        pass
+        def active(self):
+            return self.filter(active=True)

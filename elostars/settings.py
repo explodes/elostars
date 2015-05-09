@@ -1,5 +1,7 @@
 import os
 
+os.path.sep = os.path.sep
+
 rel = lambda *x: os.path.abspath(
     os.path.join(os.path.dirname(__file__), '..', *x))
 
@@ -63,6 +65,20 @@ STATICFILES_DIRS = (
 TEMPLATE_DIRS = (
     rel('templates'),
 )
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'default-snowflake',
+    },
+    'matchup': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
+    }
+}
+
+FACE_DETECTION_ENABLED = False
+FACE_DETECTION_CASCADE = None  # /usr/share/opencv/haarcascades/haarcascade_frontalface_alt.xml
 
 try:
     from local_settings import *
