@@ -1,5 +1,7 @@
 from django.contrib.auth.models import BaseUserManager
 
+from elostars.lib import managers as m
+
 
 class UserManager(BaseUserManager):
     def create_user(self, username, password=None, **extra_fields):
@@ -14,3 +16,8 @@ class UserManager(BaseUserManager):
         user.is_superuser = True
         user.save()
         return user
+
+
+class PictureManager(m.QuerySetManager):
+    class QuerySet(m.QuerySet):
+        pass

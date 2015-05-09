@@ -23,7 +23,7 @@
 					{% if user.is_authenticated %}
 					<ul class="nav navbar-nav">
 						<li class="dropdown">
-              				<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Welcome {{ request.user.username }}! <span class="caret"></span></a>
+              				<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Welcome {{ request.user.get_full_name }}! <span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
 							<li><a href=""><span class="glyphicon glyphicon-user"></span> Profile</a></li>
 							<li><a href=""><span class="glyphicon glyphicon-cog"></span> Settings</a></li>
@@ -33,6 +33,7 @@
 					</ul>
 					{% else %}
 						{% login_form %}
+						<a href="{% url 'main:signup' %}" class="btn btn-success">Sign Up</a>
 					{% endif %}
 				</div><!--/.navbar-collapse -->
 			</div><!-- /.container -->
