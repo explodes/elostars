@@ -33,14 +33,16 @@
 					</ul>
 					{% else %}
 						{% login_form %}
-						<a href="{% url 'main:signup' %}" class="btn btn-success">Sign Up</a>
 					{% endif %}
 				</div><!--/.navbar-collapse -->
 			</div><!-- /.container -->
 		</nav> <!-- /.nav -->
-
+		<div class="container main" role="main">
 
 		{% block main %}		{% endblock %}
+		
+		</div>
+
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 		{% block extrajs %}		{% endblock %}

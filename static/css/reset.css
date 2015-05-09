@@ -7,3 +7,9 @@ html, body {
     background-color: #222;
     color: #FFF;
 }
+
+.main {
+	margin-top: 50px;
+	height: 100vh;
+	padding: 30px;
+}
