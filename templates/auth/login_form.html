@@ -1,6 +1,6 @@
 <form method="post" action="{% url 'django.contrib.auth.views.login' %}" class="navbar-form navbar-right">
+	<input type="hidden" name="next" value="{{ request.path|urlencode }}"/>
 	{% csrf_token %}
-
 	<div class="form-group">
 		<input type="text" name="username" placeholder="Username" class="form-control">
 	</div>
