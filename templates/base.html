@@ -1,17 +1,30 @@
 <!DOCTYPE html>
 {% load user_stuff %}
-<html>
+<html lang="en">
 	<head>
-		<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/reset.css"
+		<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/reset.css">
 		{% block extracss %}{% endblock %}
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+		<title>Elo Stars</title>
 	</head>
 	<body>
-		{% if request.user.is_anonymous %}
-			{% login_form %}
-		{% else %}
-			Welcome {{ request.user.username }}!
-		{% endif %}
-		{% block main %}{% endblock %}
-		{% block extrajs %}{% endblock %}
+		<nav class="navbar navbar-inverse navbar-fixed-top">
+			<div class="container">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="/">ELO STARS</a>
+				</div>
+				<div id="navbar" class="navbar-collapse collapse">
+					{% if user.is_authenticated %}
+						Welcome {{ request.user.username }}!
+					{% else %}
+						{% login_form %}
+					{% endif %}
+				</div><!--/.navbar-collapse -->
+			</div>
+		</nav>
+		{% block main %}		{% endblock %}
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+		{% block extrajs %}		{% endblock %}
 	</body>
 </html>
