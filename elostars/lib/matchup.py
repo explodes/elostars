@@ -1,11 +1,11 @@
 import collections
 
 from django.core import exceptions as e
-from django.core.cache import get_cache
+from django.core.cache import caches
 from elostars.lib.guid import make_guid
 from elostars.main import models as main
 
-cache = get_cache("matchup")
+cache = caches["matchup"]
 
 TIMEOUT_SECONDS = 10 * 60  # ten minutes
 

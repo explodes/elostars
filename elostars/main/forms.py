@@ -44,6 +44,8 @@ class MatchupForm(forms.Form):
                 raise forms.ValidationError("Invalid winner")
 
             data["pair"] = pair
+        else:
+            raise forms.ValidationError("Invalid rating")
 
         return data
 

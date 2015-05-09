@@ -43,7 +43,7 @@ def rate(request, template="rate.html"):
             return redirect("main:rate")
     else:
         pair = matchup.create_matchup(request.user.pk)
-        form = forms.MatchupForm(data={"key": pair.key})
+        form = forms.MatchupForm({"key": pair.key})
 
     return render(request, template, {
         "form": form,
