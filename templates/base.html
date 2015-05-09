@@ -16,6 +16,8 @@
 				<div id="navbar" class="navbar-collapse collapse">
 					{% if user.is_authenticated %}
 						Welcome {{ request.user.username }}!
+
+					<a href="{% url 'django.contrib.auth.views.logout' %}?next={{ request.path|urlencode }}">Logout</a>
 					{% else %}
 						{% login_form %}
 					{% endif %}
