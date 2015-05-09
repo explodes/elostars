@@ -3,12 +3,13 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.utils.translation import ugettext_lazy as _
 
-from elostars.main.models import User
+from elostars.lib import admin as a
+from elostars.main import models as main
 
 
 class MyUserChangeForm(UserChangeForm):
     class Meta(UserChangeForm.Meta):
-        model = User
+        model = main.User
 
     def __init__(self, *args, **kwargs):
         super(MyUserChangeForm, self).__init__(*args, **kwargs)
@@ -16,7 +17,7 @@ class MyUserChangeForm(UserChangeForm):
 
 class MyUserAddForm(UserCreationForm):
     class Meta(UserChangeForm.Meta):
-        model = User
+        model = main.User
 
     def __init__(self, *args, **kwargs):
         super(MyUserAddForm, self).__init__(*args, **kwargs)
@@ -75,4 +76,22 @@ class MyUserAdmin(UserAdmin):
     )
 
 
-admin.site.register(User, MyUserAdmin)
+class PictureAdmin(admin.ModelAdmin):
+    list_display = (
+        "user",
+        a.thumb('image'),
+        a.thumb('image_128x128'),
+        "active",
+    )
+    search_fields = ("user__first_name", "user__last_name", "user__username",)
+    list_filter = (
+        "active",
+    )
+    list_select_related = True
+
+    raw_id_fields = ("user",)
+    readonly_fields = ("_image_128x128",)
+
+
+admin.site.register(main.User, MyUserAdmin)
+admin.site.register(main.Picture, PictureAdmin)

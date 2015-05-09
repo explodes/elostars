@@ -1,16 +1,11 @@
-import binascii
-
-import os
 from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+
 from elostars.lib import models as m
+from elostars.lib.guid import make_guid
 from elostars.main import managers
-
-
-def make_guid():
-    return binascii.b2a_hex(os.urandom(64))
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -54,6 +49,9 @@ class User(AbstractBaseUser, PermissionsMixin):
 class Picture(m.AutoImageSizingModel):
     user = models.ForeignKey(User)
 
+    guid = models.CharField(_("guid"), max_length=128, unique=True,
+                            default=make_guid)
+
     image = models.ImageField(_(u"image"),
                               upload_to="images", null=True, blank=True)
     _image_128x128 = models.CharField(_(u"image 128x128"), max_length=1024,
@@ -69,7 +67,7 @@ class Picture(m.AutoImageSizingModel):
         verbose_name_plural = _(u"pictures")
 
     def __unicode__(self):
-        return self.name
+        return unicode(self.user)
 
     def image_sizes(self):
         return (

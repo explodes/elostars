@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import decorators as auth
 from django.contrib.auth import login
 
+from elostars.lib import matchup
 from elostars.main import forms
 from elostars.main import models as main
 
@@ -28,11 +29,29 @@ def signup(request, template="registration/signup.html"):
 
 @auth.login_required(login_url="main:home")
 def rate(request, template="rate.html"):
-    return render(request, template, {
 
+    pair = None
+    if request.method == "POST":
+        form = forms.MatchupForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            winner = data["winner"]
+            loser = data["loser"]
+            key = data["key"]
+            # todo: save rating
+            matchup.close_matchup(key)
+            return redirect("main:rate")
+    else:
+        pair = matchup.create_matchup(request.user.pk)
+        form = forms.MatchupForm(data={"key": pair.key})
+
+    return render(request, template, {
+        "form": form,
+        "pair": pair,
     })
 
 
+@auth.login_required(login_url="main:home")
 def settings(request, template="settings.html"):
     return render(request, template, {
 

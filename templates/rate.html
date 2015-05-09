@@ -3,9 +3,27 @@
 {% block extracss %}{% endblock %}
 
 {% block main %}
-	{% for user in users %}
-		Hello, {{ user.get_full_name }}!
-	{% endfor %}
+
+	<form method="post" action="">
+
+		{{ form.non_field_errors }}
+		{{ form.winner.errors }}
+		{{ form.key.errors }}
+
+		<input type="hidden" name="key" value="{{ form.data.key }}"/>
+
+		<button name="winner" type="submit" value="{{ pair.left.guid }}">
+			<img src="{{ pair.left.image_128x128 }}"/>
+		</button>
+
+		<button name="winner" type="submit" value="{{ pair.right.guid }}">
+			<img src="{{ pair.right.image_128x128 }}"/>
+		</button>
+
+
+	</form>
+
+
 {% endblock main %}
 
 {% block extrajs %}{% endblock %}

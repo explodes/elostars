@@ -64,6 +64,17 @@ TEMPLATE_DIRS = (
     rel('templates'),
 )
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'default-snowflake',
+    },
+    'matchup': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
+    }
+}
+
 try:
     from local_settings import *
 except ImportError:

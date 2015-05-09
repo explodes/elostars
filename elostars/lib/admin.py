@@ -1,7 +1,7 @@
 import functools
 import operator
 
-from saltroads.lib import urls
+from elostars.lib import urls
 
 
 def _clean_short_description(description):
