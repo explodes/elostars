@@ -148,3 +148,10 @@ class Picture(m.AutoImageSizingModel):
                 image = new_image
 
         return ImageOps.fit(image, size, Image.ANTIALIAS)
+
+    def games(self):
+        return self.wins + self.losses
+
+    def rbi(self):
+        games = self.games()
+        return "n/a" if games == 0 else "%.3f" % (self.wins / games)
