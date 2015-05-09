@@ -3,11 +3,13 @@
 {% block extracss %}{% endblock %}
 
 {% block main %}
-<form enctype="multipart/form-data" method="post" action="">
-	{% csrf_token %}
-	{{ form.as_p }}
-	<button type="submit" value="Sign Up" class="btn btn-success">Sign Up</button>
-</form>
+<div class="signup">
+	<form enctype="multipart/form-data" method="post" action="">
+		{% csrf_token %}
+		{{ form.as_p }}
+		<button type="submit" value="Sign Up" class="btn btn-success">Sign Up</button>
+	</form>
+</div>
 {% endblock main %}
 
 {% block extrajs %}{% endblock %}
