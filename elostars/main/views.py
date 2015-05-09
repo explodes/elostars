@@ -1,6 +1,8 @@
-from django.shortcuts import render, redirect
+from django.conf import settings
+from django.contrib.auth import authenticate
 from django.contrib.auth import decorators as auth
 from django.contrib.auth import login
+from django.shortcuts import render, redirect
 
 from elostars.lib import matchup
 from elostars.main import forms
@@ -17,9 +19,24 @@ def home(request, template="home.html"):
 def signup(request, template="registration/signup.html"):
     if request.user.is_authenticated():
         return redirect("main:rate")
-    form = forms.SignupForm(request.POST or None, request.FILES or None)
+
+    from elostars.lib.guid import make_guid
+
+    form = forms.SignupForm(request.POST or None, request.FILES or None,
+        initial={} if not settings.DEBUG else {
+            "username": "test-%s" % make_guid()[:4],
+            "email": "%s@example.com" % make_guid()[:6],
+            "first_name": "Cheesey",
+            "last_name": "McNasty",
+            "password": "superpad",
+
+        })
     if form.is_valid():
         user = form.save()
+        user = authenticate(
+            username=user.username,
+            password=request.POST["password"]
+        )
         login(request, user)
         return redirect("main:rate")
     return render(request, template, {
@@ -27,9 +44,9 @@ def signup(request, template="registration/signup.html"):
     })
 
 
-#@auth.login_required(login_url="main:home")
+@auth.login_required(login_url="main:home")
 def rate(request, template="rate.html"):
-
+    old_pair = None
     if request.method == "POST":
         key = request.POST.get("key")
         form = forms.MatchupForm(request.POST)
@@ -38,7 +55,12 @@ def rate(request, template="rate.html"):
             winner = data["winner"]
             loser = data["loser"]
             # todo: save rating
-            return redirect("main:rate")
+            winner.win_against(loser)
+            old_pair = data["pair"]
+            print "VALID"
+        else:
+            print form
+            print "INVALID"
         matchup.close_matchup(key)
 
     pair = matchup.create_matchup(request.user.pk)
@@ -47,11 +69,12 @@ def rate(request, template="rate.html"):
     return render(request, template, {
         "form": form,
         "pair": pair,
+        "old_pair": old_pair,
     })
 
 
 @auth.login_required(login_url="main:home")
-def settings(request, template="settings.html"):
+def user_settings(request, template="settings.html"):
     return render(request, template, {
 
     })

@@ -12,18 +12,29 @@
 	{{ form.winner.errors }}
 	{{ form.key.errors }}
 
-	<input type="hidden" name="key" value="{{ form.data.key }}"/>
+	<input type="hidden" name="key" value="{{ pair.key }}"/>
 
 	<button name="winner" type="submit" value="{{ pair.left.guid }}">
 		<img src="{{ pair.left.image_128x128 }}"/>
+		{{ pair.left.score }}
 	</button>
 
 	<button name="winner" type="submit" value="{{ pair.right.guid }}">
 		<img src="{{ pair.right.image_128x128 }}"/>
+		{{ pair.right.score }}
 	</button>
-
 </form>
 
+{% if old_pair %}
+
+
+<img src="{{ old_pair.left.image_128x128 }}"/>
+{{ old_pair.left.score }}
+
+<img src="{{ old_pair.right.image_128x128 }}"/>
+{{ old_pair.right.score }}
+
+{% endif %}
 
 {% endblock main %}
 

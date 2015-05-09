@@ -6,7 +6,6 @@ import elostars.main.models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('main', '0004_user_guid'),
     ]
@@ -15,6 +14,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='user',
             name='guid',
-            field=models.CharField(default=elostars.main.models.make_guid, unique=True, max_length=128, verbose_name='guid'),
+            field=models.CharField(default=elostars.main.models.make_guid,
+                unique=True, max_length=128, verbose_name='guid'),
         ),
     ]

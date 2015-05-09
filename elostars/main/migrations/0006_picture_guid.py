@@ -6,7 +6,6 @@ import elostars.lib.guid
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('main', '0005_auto_20150509_0128'),
     ]
@@ -15,6 +14,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='picture',
             name='guid',
-            field=models.CharField(default=elostars.lib.guid.make_guid, max_length=128, verbose_name='guid'),
+            field=models.CharField(default=elostars.lib.guid.make_guid,
+                max_length=128, verbose_name='guid'),
         ),
     ]
