@@ -19,19 +19,17 @@ def validate_matchup(key):
 def close_matchup(key):
     cache.delete(key)
 
-
-def create_matchup(exclude_user):
+def create_matchup(from_user):
     # unique guid
     key = make_guid(64)
     while validate_matchup(key):
         key = make_guid(64)
 
-    left, = main.Picture.objects.active() \
-                .exclude(pk=exclude_user) \
-                .order_by("?")[:1]
-    right, = main.Picture.objects.active() \
-                 .exclude(pk__in=(left.pk, exclude_user)) \
-                 .order_by("?")[:1]
+    try:
+        left, = main.Picture.objects.matchup(from_user)[:1]
+        right, = main.Picture.objects.matchup(from_user, exclude=left)[:1]
+    except ValueError:
+        return None
 
     cache.set(key, (left.guid, right.guid), TIMEOUT_SECONDS)
 

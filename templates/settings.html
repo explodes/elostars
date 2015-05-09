@@ -3,9 +3,34 @@
 {% block extracss %}{% endblock %}
 
 {% block main %}
-	{% for user in users %}
-		Hello, {{ user.get_full_name }}!
-	{% endfor %}
+
+	<strong>Settings:</strong>
+	<form method="post" action="">
+		{% csrf_token %}
+		{{ settings_form.as_ul }}
+		<button type="submit" name="action" value="settings" class="btn">Save Settings</button>
+	</form>
+
+	<strong>Pictures:</strong>
+	<ul>
+		{% for picture in pictures %}
+			<li>
+				{% include "_rating_box.html" with picture=picture %}
+				<form method="post" action="">
+					{% csrf_token %}
+					<input type="hidden" name="guid" value="{{ picture.guid }}"/>
+					<button type="submit" name="action" value="delete" class="btn">Delete</button>
+					{% if picture.active %}
+						<button type="submit" name="action" value="deactivate" class="btn">Deactivate</button>
+					{% else %}
+						<button type="submit" name="action" value="activate" class="btn">Activate</button>
+					{% endif %}
+				</form>
+			</li>
+		{% endfor %}
+
+	</ul>
+
 {% endblock main %}
 
 {% block extrajs %}{% endblock %}

@@ -22,3 +22,17 @@ class PictureManager(m.QuerySetManager):
     class QuerySet(m.QuerySet):
         def active(self):
             return self.filter(active=True)
+
+        def matchup(self, from_user, exclude=None):
+
+            q = self.active()
+
+            if from_user.view_gender != "both":
+                q = q.filter(user__gender=from_user.view_gender)
+
+            q = q.exclude(pk=from_user.pk)
+
+            if exclude is not None:
+                q = q.exclude(pk=exclude.pk)
+
+            return q.order_by('?')

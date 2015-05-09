@@ -4,24 +4,28 @@
 
 {% block main %}
 
-<form method="post" action="">
+{% if form %}
+	<form method="post" action="">
 
-	{% csrf_token %}
+		{% csrf_token %}
 
-	{{ form.non_field_errors }}
-	{{ form.winner.errors }}
-	{{ form.key.errors }}
+		{{ form.non_field_errors }}
+		{{ form.winner.errors }}
+		{{ form.key.errors }}
 
-	<input type="hidden" name="key" value="{{ pair.key }}"/>
+		<input type="hidden" name="key" value="{{ pair.key }}"/>
 
-	<button name="winner" type="submit" value="{{ pair.left.guid }}">
-		<img src="{{ pair.left.image_128x128 }}"/>
-	</button>
+		<button name="winner" type="submit" value="{{ pair.left.guid }}">
+			<img src="{{ pair.left.image_128x128 }}"/>
+		</button>
 
-	<button name="winner" type="submit" value="{{ pair.right.guid }}">
-		<img src="{{ pair.right.image_128x128 }}"/>
-	</button>
-</form>
+		<button name="winner" type="submit" value="{{ pair.right.guid }}">
+			<img src="{{ pair.right.image_128x128 }}"/>
+		</button>
+	</form>
+{% else %}
+	<h4>There are no people left to rate! Change your settings or come back later.</h4>
+{% endif %}
 
 {% if old_pair %}
 	<hr/>
