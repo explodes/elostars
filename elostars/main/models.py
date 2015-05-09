@@ -29,6 +29,13 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = ["email", "first_name", "last_name"]
 
+    MALE = "male"
+    FEMALE = "female"
+    GENDERS = (
+        (MALE, _("Male")),
+        (FEMALE, _("Female")),
+    )
+
     username = models.CharField(_("username"), max_length=128, unique=True)
     email = models.EmailField(_("email"), max_length=128, unique=True)
 
@@ -44,6 +51,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(_("is admin"), default=False)
 
     date_joined = models.DateTimeField(_("created at"), auto_now_add=True)
+
+    gender = models.CharField(max_length=128, choices=GENDERS, default=MALE)
 
     objects = managers.UserManager()
 
@@ -120,3 +129,6 @@ class Picture(m.AutoImageSizingModel):
 
         self.save()
         loser.save()
+
+    def supposed_gender(self):
+        return self.user.gender

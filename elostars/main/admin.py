@@ -35,6 +35,7 @@ class MyUserAdmin(UserAdmin):
         "is_active",
         "is_staff",
         "date_joined",
+        "gender",
     )
     search_fields = (
         "username",
@@ -46,6 +47,7 @@ class MyUserAdmin(UserAdmin):
         "is_staff",
         "is_active",
         "is_superuser",
+        "gender",
     )
     ordering = (
         "username",
@@ -57,8 +59,11 @@ class MyUserAdmin(UserAdmin):
             "is_staff",
             "is_superuser",
         )}),
-        (_("Personal info"),
-         {"fields": ("first_name", "last_name")}),
+        (_("Personal info"), {"fields": (
+            "first_name",
+            "last_name",
+            "gender",
+        )}),
     )
     add_fieldsets = (
         (None, {
@@ -71,7 +76,9 @@ class MyUserAdmin(UserAdmin):
                 "is_staff",
                 "is_superuser",
                 "first_name",
-                "last_name",),
+                "last_name",
+                "gender",
+            ),
         }),
     )
 
@@ -82,10 +89,15 @@ class PictureAdmin(admin.ModelAdmin):
         a.thumb('image'),
         a.thumb('image_128x128'),
         "active",
+        "wins",
+        "losses",
+        "score",
+        "supposed_gender",
     )
     search_fields = ("user__first_name", "user__last_name", "user__username",)
     list_filter = (
         "active",
+        "user__gender",
     )
     list_select_related = True
 
