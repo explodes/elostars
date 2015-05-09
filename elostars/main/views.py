@@ -27,23 +27,22 @@ def signup(request, template="registration/signup.html"):
     })
 
 
-@auth.login_required(login_url="main:home")
+#@auth.login_required(login_url="main:home")
 def rate(request, template="rate.html"):
 
-    pair = None
     if request.method == "POST":
+        key = request.POST.get("key")
         form = forms.MatchupForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
             winner = data["winner"]
             loser = data["loser"]
-            key = data["key"]
             # todo: save rating
-            matchup.close_matchup(key)
             return redirect("main:rate")
-    else:
-        pair = matchup.create_matchup(request.user.pk)
-        form = forms.MatchupForm({"key": pair.key})
+        matchup.close_matchup(key)
+
+    pair = matchup.create_matchup(request.user.pk)
+    form = forms.MatchupForm(initial={"key": pair.key})
 
     return render(request, template, {
         "form": form,
