@@ -1,10 +1,16 @@
+import binascii
+import os
+
 from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-
 from elostars.lib import models as m
 from elostars.main import managers
+
+
+def make_guid():
+    return binascii.b2a_hex(os.urandom(64))
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -13,6 +19,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     username = models.CharField(_("username"), max_length=128, unique=True)
     email = models.EmailField(_("email"), max_length=128, unique=True)
+
+    guid = models.CharField(_("guid"), max_length=128, default=make_guid)
 
     first_name = models.CharField(_("first name"), max_length=128)
     last_name = models.CharField(_("last name"), max_length=128)
