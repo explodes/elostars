@@ -2,6 +2,7 @@ from __future__ import division
 
 import math
 
+import os
 from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
@@ -9,6 +10,19 @@ from django.utils.translation import ugettext_lazy as _
 from elostars.lib import models as m
 from elostars.lib.guid import make_guid
 from elostars.main import managers
+
+
+def image_name(_, filename):
+    ext = filename.split('.')[-1]
+
+    filename = "%s.%s" % (make_guid(8), ext)
+    return os.path.join(
+        "images",
+        make_guid(2),
+        make_guid(2),
+        make_guid(4),
+        filename
+    )
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -55,8 +69,7 @@ class Picture(m.AutoImageSizingModel):
     guid = models.CharField(_("guid"), max_length=128, unique=True,
         default=make_guid)
 
-    image = models.ImageField(_(u"image"),
-        upload_to="images", null=True, blank=True)
+    image = models.ImageField(_(u"image"), upload_to=image_name)
     _image_128x128 = models.CharField(_(u"image 128x128"), max_length=1024,
         null=True, blank=True)
 
@@ -80,9 +93,6 @@ class Picture(m.AutoImageSizingModel):
         return (
             ("_image_128x128", (128, 128)),
         )
-
-    def upload_to(self):
-        return "images"
 
     @property
     def image_128x128(self):

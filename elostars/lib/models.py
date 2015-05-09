@@ -12,7 +12,7 @@ class AutoImageSizingModel(models.Model):
         return self.image
 
     def upload_to(self):
-        return 'images'
+        return os.path.dirname(str(self.source_photo()))
 
     def save_type(self):
         return ("jpg", "JPEG")
@@ -21,10 +21,22 @@ class AutoImageSizingModel(models.Model):
         # ((prop, (width, height)), ...)
         return ()
 
+    def transform(self, image, key, size):
+        return image
+
+    def clear_images(self):
+        for key, size in self.image_sizes():
+            setattr(self, key, None)
+
     def save(self, *args, **kwargs):
         super(AutoImageSizingModel, self).save(*args, **kwargs)
         photo = self.source_photo()
-        if photo:
+
+        sizes = self.image_sizes()
+
+        missing_photos = any((not getattr(self, key) for key, size in sizes))
+
+        if photo and missing_photos:
             # this returns the full system path to the original file
             photopath = str(photo.path)
 
@@ -37,14 +49,16 @@ class AutoImageSizingModel(models.Model):
 
             save_ext, save_type = self.save_type()
 
-            for key, size in self.image_sizes():
-                thumb = ImageOps.fit(image, size, Image.ANTIALIAS)
-                outname = '%s_%sx%s.%s' % (filename, size[0], size[1], save_ext)
-                outpath = '%s%s%s' % (fullpath, os.sep, outname)
-                thumb.save(outpath, save_type)
-                result = "%s/%s" % (self.upload_to(), outname)
-                setattr(self, key, result)
+            for key, size in sizes:
+                if not getattr(self, key):
+                    thumb = ImageOps.fit(image, size, Image.ANTIALIAS)
+                    thumb = self.transform(thumb, key, size)
+                    outname = '%s_%sx%s.%s' % \
+                              (filename, size[0], size[1], save_ext)
+                    outpath = '%s%s%s' % (fullpath, os.sep, outname)
+                    thumb.save(outpath, save_type)
+                    result = "%s/%s" % (self.upload_to(), outname)
+                    setattr(self, key, result)
         else:
-            for key, size in self.image_sizes():
-                setattr(self, key, None)
+            self.clear_images()
         super(AutoImageSizingModel, self).save(*args, **kwargs)

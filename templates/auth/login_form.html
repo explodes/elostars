@@ -1,5 +1,5 @@
 <form method="post" action="{% url 'django.contrib.auth.views.login' %}" class="navbar-form navbar-right">
-	<input type="hidden" name="next" value="{{ request.path|urlencode }}"/>
+	<input type="hidden" name="next" value="{% url 'main:rate' %}"/>
 	{% csrf_token %}
 	<div class="form-group">
 		<input type="text" name="username" placeholder="Username" class="form-control">
@@ -7,7 +7,7 @@
 	<div class="form-group">
 		<input type="password" name="password" placeholder="Password" class="form-control">
 	</div>
-	<button type="submit" value="Login" class="btn btn-success">Log In </button>
+	<button type="submit" value="Login" class="btn btn-success">Log In</button>
 	<a href="{% url 'main:signup' %}" class="btn btn-success navbar-right">Sign Up</a>
 </form>
 

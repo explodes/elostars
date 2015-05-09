@@ -3,5 +3,5 @@ import binascii
 import os
 
 
-def make_guid():
-    return binascii.b2a_hex(os.urandom(64))
+def make_guid(length=32):
+    return binascii.b2a_hex(os.urandom(length))
