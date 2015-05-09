@@ -25,13 +25,12 @@
 
 {% if old_pair %}
 	<hr/>
-	<img src="{{ old_pair.left.image_128x128 }}"/>
-	<br/>
-	{{ old_pair.left.score }}
+	<strong>Winner:</strong><br/>
+	{% include "_rating_box.html" with picture=old_pair.left %}
 	<hr/>
-	<img src="{{ old_pair.right.image_128x128 }}"/>
-	<br/>
-	{{ old_pair.right.score }}
+	<strong>Runner Up:</strong><br/>
+	{% include "_rating_box.html" with picture=old_pair.right %}
+	<hr/>
 {% endif %}
 
 {% endblock main %}
