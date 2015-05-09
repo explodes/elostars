@@ -22,9 +22,9 @@ def close_matchup(key):
 
 def create_matchup(exclude_user):
     # unique guid
-    key = make_guid(128)
+    key = make_guid(64)
     while validate_matchup(key):
-        key = make_guid(128)
+        key = make_guid(64)
 
     left, = main.Picture.objects.active() \
                 .exclude(pk=exclude_user) \

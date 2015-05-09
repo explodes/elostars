@@ -1,5 +1,7 @@
 import os
 
+os.path.sep = os.path.sep
+
 rel = lambda *x: os.path.abspath(
     os.path.join(os.path.dirname(__file__), '..', *x))
 
@@ -74,6 +76,9 @@ CACHES = {
         'LOCATION': 'unique-snowflake',
     }
 }
+
+FACE_DETECTION_ENABLED = False
+FACE_DETECTION_CASCADE = None  # /usr/share/opencv/haarcascades/haarcascade_frontalface_alt.xml
 
 try:
     from local_settings import *

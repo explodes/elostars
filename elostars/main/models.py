@@ -7,6 +7,8 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from PIL import Image, ImageOps
+from elostars.lib import face
 from elostars.lib import models as m
 from elostars.lib.guid import make_guid
 from elostars.main import managers
@@ -132,3 +134,17 @@ class Picture(m.AutoImageSizingModel):
 
     def supposed_gender(self):
         return self.user.gender
+
+    def pre_transform(self, image):
+        return image
+
+    def transform(self, image, key, size):
+        if settings.FACE_DETECTION_ENABLED:
+            new_image = face.detect_face(image)
+            if new_image is None:
+                print "No face detected"
+            else:
+                print "Face detected"
+                image = new_image
+
+        return ImageOps.fit(image, size, Image.ANTIALIAS)

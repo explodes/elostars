@@ -36,10 +36,7 @@ class MatchupForm(forms.Form):
         key = self.cleaned_data["key"]
 
         if not matchup.validate_matchup(key):
-            print "INVALID MATCHUP"
             raise forms.ValidationError("Invalid matchup")
-
-        print "VALID MATCHUP"
 
         return key
 
@@ -48,9 +45,6 @@ class MatchupForm(forms.Form):
 
         key = cleaned_data.get("key")
         winner = cleaned_data.get("winner")
-
-        print self.data
-        print cleaned_data
 
         if key and winner:
             pair = matchup.get_matchup(key)

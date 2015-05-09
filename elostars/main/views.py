@@ -57,10 +57,6 @@ def rate(request, template="rate.html"):
             # todo: save rating
             winner.win_against(loser)
             old_pair = data["pair"]
-            print "VALID"
-        else:
-            print form
-            print "INVALID"
         matchup.close_matchup(key)
 
     pair = matchup.create_matchup(request.user.pk)

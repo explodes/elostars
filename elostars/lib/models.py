@@ -21,6 +21,12 @@ class AutoImageSizingModel(models.Model):
         # ((prop, (width, height)), ...)
         return ()
 
+    def should_pre_transform(self, image):
+        return False
+
+    def pre_transform(self, image):
+        return image
+
     def transform(self, image, key, size):
         return image
 
@@ -47,6 +53,11 @@ class AutoImageSizingModel(models.Model):
 
                 # open the image using PIL
                 image = Image.open(photopath)
+
+                post_image = self.pre_transform(image)
+                if post_image != image:
+                    post_image.save(photopath)
+                    image = post_image
 
                 save_ext, save_type = self.save_type()
 
