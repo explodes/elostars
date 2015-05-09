@@ -66,6 +66,11 @@ def rate(request, template="rate.html"):
     pair = matchup.create_matchup(request.user.pk)
     form = forms.MatchupForm(initial={"key": pair.key})
 
+    if old_pair:
+        if old_pair.right.score > old_pair.left.score:
+            old_pair = matchup.Matchup(
+                old_pair.key, old_pair.right, old_pair.left)
+
     return render(request, template, {
         "form": form,
         "pair": pair,
