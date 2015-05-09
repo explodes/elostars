@@ -115,3 +115,13 @@ def user_settings(request, template="settings.html"):
         "pictures": pictures,
         "settings_form": settings_form
     })
+
+
+def privacy(request, template="privacy.html"):
+    return render(request, template, {
+    })
+
+
+def terms(request, template="terms.html"):
+    return render(request, template, {
+    })
