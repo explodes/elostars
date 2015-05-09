@@ -11,7 +11,9 @@ class SignupForm(forms.ModelForm):
 
     class Meta:
         model = main.User
-        fields = ("username", "email", "first_name", "last_name", "gender")
+        fields = (
+            "username", "email", "first_name", "last_name", "gender",
+            "view_gender")
 
     def save(self, commit=True):
         user = super(SignupForm, self).save(commit=False)
@@ -26,6 +28,12 @@ class SignupForm(forms.ModelForm):
             picture.save()
 
         return user
+
+
+class SettingsForm(forms.ModelForm):
+    class Meta:
+        model = main.User
+        fields = ("first_name", "last_name", "view_gender")
 
 
 class MatchupForm(forms.Form):

@@ -31,9 +31,16 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = ["email", "first_name", "last_name"]
 
+    BOTH = "both"
     MALE = "male"
     FEMALE = "female"
     GENDERS = (
+        (MALE, _("Male")),
+        (FEMALE, _("Female")),
+    )
+
+    VIEW_GENDERS = (
+        (BOTH, _("Both")),
         (MALE, _("Male")),
         (FEMALE, _("Female")),
     )
@@ -55,6 +62,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(_("created at"), auto_now_add=True)
 
     gender = models.CharField(max_length=128, choices=GENDERS, default=MALE)
+    view_gender = models.CharField(_("show me genders"), max_length=128,
+        choices=VIEW_GENDERS, default=BOTH)
 
     objects = managers.UserManager()
 
@@ -75,7 +84,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class Picture(m.AutoImageSizingModel):
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, related_name="pictures")
 
     guid = models.CharField(_("guid"), max_length=128, unique=True,
         default=make_guid)

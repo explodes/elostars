@@ -5,4 +5,6 @@ urlpatterns = patterns("elostars.main.views",
     url("^signup/$", "signup", name="signup"),
     url("^settings/$", "user_settings", name="settings"),
     url("^rate/$", "rate", name="rate"),
+    url("^privacy-policy/$", "privacy", name="privacy"),
+    url("^terms-and-conditions/$", "terms", name="terms"),
 )
