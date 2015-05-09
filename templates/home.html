@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block extracss %}{% endblock %}
+
+{% block main %}
+
+	{% for user in users %}
+		Hello, {{ user.username }}!
+	{% endfor %}
+
+{% endblock main %}
+
+{% block extrajs %}{% endblock %}
+
