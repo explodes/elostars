@@ -4,6 +4,8 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^', include('elostars.main.urls', namespace="main")),
+
+    url('^', include('django.contrib.auth.urls')),
     url(r'^admin/', include(admin.site.urls)),
 ]
 
