@@ -21,11 +21,11 @@
 				</div>
 				<div id="navbar" class="navbar-collapse collapse navbar-right">
 					{% if user.is_authenticated %}
-						Welcome {{ request.user.username }}!
-
-					<a href="{% url 'django.contrib.auth.views.logout' %}?next={{ request.path|urlencode }}">Logout</a>
+						Welcome {{ request.user.get_full_name }}!
+						<a href="{% url 'django.contrib.auth.views.logout' %}?next={{ request.path|urlencode }}">Logout</a>
 					{% else %}
 						{% login_form %}
+						<a href="{% url 'main:signup' %}" class="btn btn-success">Sign Up</a>
 					{% endif %}
 				</div><!--/.navbar-collapse -->
 			</div><!-- /.container -->
