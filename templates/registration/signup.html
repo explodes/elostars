@@ -3,12 +3,18 @@
 {% block extracss %}{% endblock %}
 
 {% block main %}
+<div class="page-header">
+	<h1><center>Sign Up!</center></h1>
+</div>
+<div class="col-md-4"></div>
+<div class="col-md-4">
 	<form enctype="multipart/form-data" method="post" action="">
 		{% csrf_token %}
 		{{ form.as_p }}
 		<button type="submit" value="Sign Up" class="btn btn-success">Sign Up</button>
 	</form>
+</div>
+<div class="col-md-4"></div>
 {% endblock main %}
 
 {% block extrajs %}{% endblock %}
-
