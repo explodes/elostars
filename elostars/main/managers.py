@@ -23,7 +23,7 @@ class PictureManager(m.QuerySetManager):
         def active(self):
             return self.filter(active=True)
 
-        def matchup(self, from_user, exclude=None):
+        def matchup(self, from_user, against=None):
 
             q = self.active()
 
@@ -32,7 +32,8 @@ class PictureManager(m.QuerySetManager):
 
             q = q.exclude(pk=from_user.pk)
 
-            if exclude is not None:
-                q = q.exclude(pk=exclude.pk)
+            if against is not None:
+                q = q.exclude(pk=against.pk)
+                q = q.filter(user__gender=against.user.gender)
 
             return q.order_by('?')
