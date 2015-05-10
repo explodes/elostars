@@ -3,7 +3,8 @@
 {% block extracss %}{% endblock %}
 
 {% block main %}
-
+<div class="container-fluid">
+<div class="col-md-3"></div>
 {% if form %}
 	<form method="post" action="">
 
@@ -15,29 +16,42 @@
 
 		<input type="hidden" name="key" value="{{ pair.key }}"/>
 
+		<div class="col-md-3">
 		<button name="winner" type="submit" value="{{ pair.left.guid }}">
 			<img src="{{ pair.left.image_128x128 }}"/>
 		</button>
+		</div>
 
+
+		<div class="col-md-3">
 		<button name="winner" type="submit" value="{{ pair.right.guid }}">
 			<img src="{{ pair.right.image_128x128 }}"/>
 		</button>
+		</div>
 	</form>
 {% else %}
-	<h4>There are no people left to rate! Change your settings or come back later.</h4>
+<div class="page-header">
+	<h4><center>There are no people left to rate! Change your settings or come back later.</center></h4>
+</div>
 {% endif %}
+<div class="col-md-3"></div>
+</div>
 
+<div class="container-fluid">
 {% if old_pair %}
 	<hr/>
+	<div class="col-md-3"></div>
+	<div class="col-md-3">
 	<strong>Winner:</strong><br/>
 	{% include "_rating_box.html" with picture=old_pair.left %}
-	<hr/>
+</div>
+	<div class="col-md-3">
 	<strong>Runner Up:</strong><br/>
 	{% include "_rating_box.html" with picture=old_pair.right %}
-	<hr/>
+	</div>
+	<div class="col-md-3"></div>
 {% endif %}
-
+</div>
 {% endblock main %}
 
 {% block extrajs %}{% endblock %}
-
