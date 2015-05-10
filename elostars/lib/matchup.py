@@ -27,7 +27,7 @@ def create_matchup(from_user):
 
     try:
         left, = main.Picture.objects.matchup(from_user)[:1]
-        right, = main.Picture.objects.matchup(from_user, exclude=left)[:1]
+        right, = main.Picture.objects.matchup(from_user, left)[:1]
     except ValueError:
         return None
 
