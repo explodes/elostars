@@ -150,10 +150,7 @@ class Picture(m.AutoImageSizingModel):
     def transform(self, image, key, size):
         if settings.FACE_DETECTION_ENABLED:
             new_image = face.detect_face(image)
-            if new_image is None:
-                print "No face detected"
-            else:
-                print "Face detected"
+            if new_image is not None:
                 image = new_image
 
         return ImageOps.fit(image, size, Image.ANTIALIAS)
