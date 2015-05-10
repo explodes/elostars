@@ -63,6 +63,7 @@ class MyUserAdmin(UserAdmin):
             "first_name",
             "last_name",
             "gender",
+            "view_gender",
         )}),
     )
     add_fieldsets = (
@@ -78,6 +79,7 @@ class MyUserAdmin(UserAdmin):
                 "first_name",
                 "last_name",
                 "gender",
+                "view_gender",
             ),
         }),
     )
