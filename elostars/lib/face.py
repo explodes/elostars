@@ -70,11 +70,6 @@ def imgCrop(image, cropBox, boxScale=1.0):
                min(iw, x1),
                min(ih, y1)])
 
-    print dx
-    print dy
-    print cropBox
-    print PIL_box
-
     crop = image.crop(PIL_box)
 
     return crop
